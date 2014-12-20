@@ -25,10 +25,6 @@ module Dione
       self.attachment(self.document['content']).data
     end
 
-    def safe_proxy
-      ContentProxy.new(self)
-    end
-
     def to_template
       case self.format
       when 'html-fragment'

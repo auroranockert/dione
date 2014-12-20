@@ -27,10 +27,6 @@ module Dione
       self.site.reify(self.document['published_at']) if self.document['published_at']
     end
 
-    def safe_proxy
-      PostProxy.new(self)
-    end
-
     def template
       self.site.reify(self.document['template'])
     end
