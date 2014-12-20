@@ -1,0 +1,13 @@
+{
+  "_id": "index",
+  "title": "Aventine",
+  "urls": ["/"],
+  "type": "dione/post",
+  "content": { "type": "dione/content", "format": "liquid", "content": "index.liquid" },
+  "template": { "id": "default-layout" },
+  "attachments": {
+    "index.liquid": {
+      "public": false
+    }
+  }
+}

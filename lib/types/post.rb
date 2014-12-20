@@ -9,34 +9,37 @@
 # distributed under the Licence is distributed on an "AS IS" basis,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the Licence for the specific language governing permissions and
-# limitations under the Licence. 
+# limitations under the Licence.
 
 module Dione
   class Post < Dione::Object
     type 'dione/post'
 
     def title
-      self.document['title']
+      self['title']
     end
 
     def content
-      @content ||= self.site.reify(self.document['content'], self)
+      @content ||= self.site.reify(self['content'], self)
     end
 
     def published_at
-      self.site.reify(self.document['published_at']) if self.document['published_at']
+      Time.iso8601(self['published_at']) if self['published_at']
     end
 
     def template
-      self.site.reify(self.document['template'])
+      self.site.reify(self['template'])
     end
 
     def to_template
-      { 'title' => self.title, 'published_at' => self.published_at.to_template }
+      { 'title' => self.title, 'published_at' => self.published_at }
     end
-    
+
     def http_get(env)
-      [200, { 'Content-Type' => 'text/html' }, StringIO.new(self.template.render(env, 'content' => self.content.to_template, 'page' => self.to_template, 'site' => self.site.to_template))]
+      document = { 'page' => self.to_template, 'site' => self.site.to_template }
+      document['content'] = self.content.render(env, document)
+
+      [200, { 'Content-Type' => 'text/html' }, StringIO.new(self.template.render(env, document))]
     end
   end
 end

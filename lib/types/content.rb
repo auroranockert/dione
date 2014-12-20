@@ -18,19 +18,21 @@ module Dione
     type 'dione/content'
 
     def format
-      self.document['format']
+      self['format']
     end
 
     def content
-      self.attachment(self.document['content']).data
+      self.attachment(self['content']).data
     end
 
-    def to_template
+    def render(_, document)
       case self.format
       when 'html-fragment'
-        self.document['content']
+        self.content
       when 'markdown'
         Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(self.content)
+      when 'liquid'
+        Liquid::Template.parse(self.content).render(document)
       else
         fail Dione::NotFound, "Content format #{self.format} not supported"
       end

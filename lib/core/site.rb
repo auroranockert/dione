@@ -31,8 +31,18 @@ module Dione
       end
     end
 
+    def posts
+      self.database.view('dione/posts', descending: true)["rows"].map do |row|
+        self.reify(row)
+      end
+    end
+
     def to_template
-      {}
+      {
+        'posts' => lambda {
+          self.posts.map { |x| x.to_template }
+        }
+      }
     end
   end
 end

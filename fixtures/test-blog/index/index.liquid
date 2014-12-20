@@ -1,0 +1,9 @@
+{% for post in site.posts %}
+<article class='summary'>
+  <a href='{{ post.canonical_url }}'><h1>{{ post.title }}</h1></a>
+  <div class='meta'>
+    Posted at <time datetime='{{ post.published_at }}'>{{ post.published_at | date_to_string }}</time>
+    {% if post.tags.size > 0 %} -- <span class='tags'>Tagged with {{ post.tags | array_to_sentence_string }}</span>{% endif %}
+  </div>
+</article>
+{% endfor %}

@@ -26,7 +26,7 @@ module Dione
       if name = document['id']
         self.new(site, site.database.get(name).merge(document))
       else
-        document = document.merge('_id' => parent.document['_id'], '_rev' => parent.document['_rev'], '_attachments' => parent.document['_attachments']) if parent
+        document = document.merge('_id' => parent['_id'], '_rev' => parent['_rev'], '_attachments' => parent['_attachments']) if parent
         self.new(site, document)
       end
     end
@@ -38,6 +38,10 @@ module Dione
 
     def initialize(site, document)
       @site, @document = site, document
+    end
+
+    def [](key)
+      self.document[key]
     end
 
     def call(env)
@@ -64,11 +68,11 @@ module Dione
     end
 
     def attachment(name)
-      Dione::Attachment.new(self, name) if self.document['_attachments'].keys.include? name
+      Dione::Attachment.new(self, name) if self['_attachments'].keys.include? name
     end
 
     def attachments
-      self.document['_attachments'].keys.map { |name| Dione::Attachment.new(self, name) }
+      self['_attachments'].keys.map { |name| Dione::Attachment.new(self, name) }
     end
   end
 end

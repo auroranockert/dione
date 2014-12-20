@@ -19,17 +19,17 @@ module Dione
     type 'dione/template'
 
     def format
-      self.document['format']
+      self['format']
     end
 
     def parent
-      if self.document['parent']
-        self.site.reify(self.document['parent'])
+      if self['parent']
+        self.site.reify(self['parent'])
       end
     end
 
     def template_text
-      self.attachment(self.document['template']).data
+      self.attachment(self['template']).data
     end
 
     def render(env, document)

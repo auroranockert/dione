@@ -18,7 +18,7 @@ module Dione
     end
 
     def metadata
-      @metadata ||= @object.document['attachments'][@name].merge(@object.document['_attachments'][@name])
+      @metadata ||= @object['attachments'][@name].merge(@object['_attachments'][@name])
     end
 
     def data

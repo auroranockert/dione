@@ -27,16 +27,21 @@ module Dione
 
       routes = env['Dione.site'].database.view('dione/routes', key: env['PATH_INFO'])["rows"].map { |x| x['value'] }
 
-      fail Dione::NotFound, "Multiple routes found for path #{env['PATH_INFO']}" if routes.length > 1
+      case routes.length
+      when 0
+        fail Dione::NotFound, "No route found for path #{env['PATH_INFO']}"
+      when 1
+        env['Dione.route'] = routes.first
+        env['Dione.page'] = env['Dione.site'].reify('id' => env['Dione.route'][0])
 
-      env['Dione.route'] = routes.first
-      env['Dione.page'] = env['Dione.site'].reify('id' => env['Dione.route'][0])
+        if attachment = env['Dione.route'][1]
+          env['Dione.attachment'] = env['Dione.page'].attachment(attachment)
+        end
 
-      if attachment = env['Dione.route'][1]
-        env['Dione.attachment'] = env['Dione.page'].attachment(attachment)
+        @app.call(env)
+      else
+        fail Dione::NotFound, "Multiple routes found for path #{env['PATH_INFO']}"
       end
-
-      @app.call(env)
     end
   end
 end
