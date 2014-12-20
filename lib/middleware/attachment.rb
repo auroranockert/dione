@@ -21,7 +21,16 @@ module Dione
 
     def call(env)
       if attachment = env['Dione.attachment']
-        [200, { 'Content-Type' => attachment.content_type }, StringIO.new(attachment.data)]
+        body = case env['REQUEST_METHOD']
+        when 'GET'
+          StringIO.new(attachment.data)
+        when 'HEAD'
+          StringIO.new('')
+        else
+          return [405, { 'Allow' => 'GET, HEAD' }, StringIO.new('')]
+        end
+
+        [200, { 'Content-Type' => attachment.content_type, 'Content-Length' => attachment.content_length.to_s }, body]
       else
         @app.call(env)
       end

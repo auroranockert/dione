@@ -9,7 +9,7 @@
 # distributed under the Licence is distributed on an "AS IS" basis,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the Licence for the specific language governing permissions and
-# limitations under the Licence. 
+# limitations under the Licence.
 
 module Dione
   DECODE_NAME_TO_CLASS = {}
@@ -38,6 +38,29 @@ module Dione
 
     def initialize(site, document)
       @site, @document = site, document
+    end
+
+    def call(env)
+      case env['REQUEST_METHOD']
+      when 'GET'
+        self.http_get(env)
+      when 'HEAD'
+        self.http_head(env)
+      when 'POST'
+        self.http_post(env)
+      when 'PUT'
+        self.http_put(env)
+      when 'DELETE'
+        self.http_delete(env)
+      else
+        self.http_other(env)
+      end
+    rescue NoMethodError
+      methods = [:get, :head, :post, :put, :delete].map do |method|
+        method.to_s.upcase if self.respond_to? "http_#{method}".intern
+      end.compact.join(', ')
+
+      [405, { 'Allow' => methods }, StringIO.new('')]
     end
 
     def attachment(name)

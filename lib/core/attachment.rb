@@ -25,6 +25,10 @@ module Dione
       @object.site.database.fetch_attachment(@object.document, @name)
     end
 
+    def content_length
+      self.metadata['length']
+    end
+
     def content_type
       self.metadata['content_type']
     end
