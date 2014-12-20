@@ -19,12 +19,20 @@ module Dione
       self['title']
     end
 
-    def content
-      @content ||= self.site.reify(self['content'], self)
-    end
-
     def published_at
       Time.iso8601(self['published_at']) if self['published_at']
+    end
+
+    def urls
+      self['urls']
+    end
+
+    def canonical_url
+      self['canonical_url'] || self.urls.first
+    end
+
+    def content
+      @content ||= self.site.reify(self['content'], self)
     end
 
     def template
@@ -32,7 +40,12 @@ module Dione
     end
 
     def to_template
-      { 'title' => self.title, 'published_at' => self.published_at }
+      {
+        'title' => self.title,
+        'published_at' => self.published_at,
+        'urls' => self.urls,
+        'canonical_url' => self.canonical_url
+      }
     end
 
     def http_get(env)
