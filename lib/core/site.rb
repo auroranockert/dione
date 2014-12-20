@@ -21,21 +21,6 @@ module Dione
       @database = CouchRest.database(database)
     end
 
-    def self.route(env)
-      site = Site.new(ENV['DIONE_DATABASE'])
-      routes = site.database.view('dione/routes', key: env['PATH_INFO'])["rows"].map { |x| x['value'] }
-      
-      fail Dione::NotFound, "Multiple routes found for path #{env['PATH_INFO']}" if routes.length > 1
-
-      object = site.reify('id' => routes.first[0])
-
-      if attachment = routes.first[1]
-        object.attachment(attachment)
-      else
-        object
-      end
-    end
-
     def reify(document, parent = nil)
       document = self.database.get(document['id']).merge(document) if document['id']
 

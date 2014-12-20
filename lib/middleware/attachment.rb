@@ -11,16 +11,20 @@
 # See the Licence for the specific language governing permissions and
 # limitations under the Licence. 
 
-require 'pathname'
+module Dione
+  class AttachmentHandler < Dione::Middleware
+    priority 20
 
-module ::Dione
-  LIB = Pathname.new("#{File.dirname(__FILE__)}/lib")
+    def initialize(app)
+      @app = app
+    end
+
+    def call(env)
+      if attachment = env['Dione.attachment']
+        [200, { 'Content-Type' => attachment.content_type }, StringIO.new(attachment.data)]
+      else
+        @app.call(env)
+      end
+    end
+  end
 end
-
-$:.unshift(Dione::LIB)
-
-Pathname.glob('lib/{core,types,middleware}/*.rb') { |f| require f.relative_path_from(Dione::LIB) }
-
-Dione::Middleware.all.each { |m| use m }
-
-run (lambda { |env| env['Dione.page'].call(env) })
