@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'pathname'
+require 'couchrest'
+
+def read_database(db, path)
+  configuration = JSON.parse(File.read("#{path}/configuration.json"))
+
+  if includes = configuration['includes']
+    includes.each { |inc| read_database(db, "#{path}/#{inc}") }
+  end
+
+  Pathname.glob("#{path}/**/document.json") do |document|
+    object = JSON.parse(File.read(document))
+
+    db.save_doc(object)
+
+    Pathname.glob("#{document.dirname}/**/*") do |file|
+      unless file.directory? or file == document
+        object = db.get(object['_id'])
+
+        path = file.relative_path_from(document.dirname).to_s
+
+        mime = case file.extname
+        when '.css' then 'text/css'
+        when '.js' then 'application/javascript'
+        when '.json' then 'application/json'
+        when '.jpg' then 'image/jpeg'
+        when '.pdf' then 'application/pdf'
+        else
+          'application/octet-stream'
+        end
+
+        db.put_attachment(object, path, File.read(file), content_type: mime)
+      end
+    end
+  end
+end
+
+database = CouchRest.database(ENV['DIONE_DATABASE'])
+database.recreate!
+
+read_database(database, ARGV[0])

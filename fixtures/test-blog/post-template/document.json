@@ -1,0 +1,7 @@
+{
+  "_id": "post-template",
+  "type": "dione/template",
+  "format": "liquid",
+  "template": "post.liquid",
+  "parent": { "id": "default-layout" }
+}

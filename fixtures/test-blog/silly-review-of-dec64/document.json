@@ -1,0 +1,14 @@
+{
+  "_id": "silly-review-of-dec64",
+  "title": "A silly review of DEC64",
+  "published_at": { "type": "dione/date", "date": "2014-03-09T11:15:00+02:00" },
+  "urls": ["/silly-review-of-dec64"],
+  "type": "dione/post",
+  "content": { "type": "dione/content", "format": "markdown", "content": "silly-review.md" },
+  "template": { "id": "post-template" },
+  "attachments": {
+    "silly-review.md": {
+      "public": false
+    }
+  }
+}

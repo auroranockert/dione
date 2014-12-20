@@ -1,0 +1,20 @@
+{
+  "_id": "css",
+  "urls": ["/css"],
+  "type": "dione/post",
+  "public": false,
+  "attachments": {
+    "main.css": {
+      "public": true
+    },
+    "blog/header.css": {
+      "public": true
+    },
+    "blog/footer.css": {
+      "public": true
+    },
+    "blog/articles.css": {
+      "public": true
+    }
+  }
+}

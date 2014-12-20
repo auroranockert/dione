@@ -1,0 +1,6 @@
+{
+   "_id": "default-layout",
+   "type": "dione/template",
+   "format": "liquid",
+   "template": "default.liquid"
+}
