@@ -24,6 +24,7 @@ module Dione
         self.new(site, site.database.get(name).merge(document))
       else
         document = document.merge('_id' => parent['_id'], '_rev' => parent['_rev'], '_attachments' => parent['_attachments']) if parent
+
         self.new(site, document)
       end
     end
