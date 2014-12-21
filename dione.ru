@@ -19,7 +19,7 @@ end
 
 $:.unshift(Dione::LIB)
 
-Pathname.glob('lib/{core,types,middleware}/*.rb') { |f| require f.relative_path_from(Dione::LIB) }
+Pathname.glob("#{File.dirname(__FILE__)}/lib/{core,types,middleware}/*.rb") { |f| require f.relative_path_from(Dione::LIB) }
 
 Dione::Middleware.all.each { |m| use m }
 
