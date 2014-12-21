@@ -19,9 +19,6 @@ module Dione
       @app = app
     end
 
-    def route(env)
-    end
-
     def call(env)
       env['Dione.site'] = Dione::Site.new(ENV['DIONE_DATABASE'])
 
