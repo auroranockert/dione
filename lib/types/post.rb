@@ -39,7 +39,7 @@ module Dione
       self.site.reify(self['template'])
     end
 
-    def to_template
+    def to_liquid
       {
         'title' => self.title,
         'published_at' => self.published_at,
@@ -49,7 +49,7 @@ module Dione
     end
 
     def http_get(env)
-      document = { 'page' => self.to_template, 'site' => self.site.to_template }
+      document = { 'page' => self, 'site' => self.site }
       document['content'] = self.content.render(env, document)
 
       [200, { 'Content-Type' => 'text/html' }, StringIO.new(self.template.render(env, document))]

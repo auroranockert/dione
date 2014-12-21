@@ -44,11 +44,9 @@ module Dione
       self.query('dione/posts', descending: true)
     end
 
-    def to_template
+    def to_liquid
       {
-        'posts' => lambda {
-          self.posts.map { |x| x.to_template }
-        }
+        'posts' => lambda { self.posts }
       }
     end
   end
