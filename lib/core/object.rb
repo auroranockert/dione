@@ -67,6 +67,10 @@ module Dione
       [405, { 'Allow' => methods }, StringIO.new('')]
     end
 
+    def key
+      self['_key']
+    end
+
     def attachment(name)
       Dione::Attachment.new(self, name) if self['_attachments'].keys.include? name
     end

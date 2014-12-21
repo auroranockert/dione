@@ -31,10 +31,15 @@ module Dione
       end
     end
 
-    def posts
-      self.database.view('dione/posts', descending: true)["rows"].map do |row|
-        self.reify(row)
+    def query(view, options = {})
+      self.database.view(view, options.merge(include_docs: true))["rows"].map do |row|
+        self.reify(row['doc'].merge('_key' => row['key']))
       end
+      
+    end
+
+    def posts
+      self.query('dione/posts', descending: true)
     end
 
     def to_template
