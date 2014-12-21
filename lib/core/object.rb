@@ -13,7 +13,6 @@
 
 module Dione
   DECODE_NAME_TO_CLASS = {}
-  DECODE_CLASS_TO_NAME = {}
 
   class Object
     attr_reader :site, :document
@@ -33,7 +32,6 @@ module Dione
 
     def self.type(name)
       DECODE_NAME_TO_CLASS[name] = self
-      DECODE_CLASS_TO_NAME[self] = name
     end
 
     def initialize(site, document)
