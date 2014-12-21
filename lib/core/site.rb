@@ -14,6 +14,8 @@
 require 'couchrest'
 
 module Dione
+  TYPE_TO_CLASS = {}
+
   class Site
     attr_reader :database
 
@@ -24,7 +26,7 @@ module Dione
     def reify(document, parent = nil)
       document = self.database.get(document['id']).merge(document) if document['id']
 
-      if type = DECODE_NAME_TO_CLASS[document['type']]
+      if type = Dione::TYPE_TO_CLASS[document['type']]
         type.reify(self, document, parent)
       else
         fail Dione::NotFound, "Could not reify #{document.inspect}"

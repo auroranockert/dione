@@ -12,8 +12,6 @@
 # limitations under the Licence.
 
 module Dione
-  DECODE_NAME_TO_CLASS = {}
-
   class Object
     attr_reader :site, :document
 
@@ -31,7 +29,7 @@ module Dione
     end
 
     def self.type(name)
-      DECODE_NAME_TO_CLASS[name] = self
+      Dione::TYPE_TO_CLASS[name] = self
     end
 
     def initialize(site, document)
