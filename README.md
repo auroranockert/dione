@@ -9,8 +9,9 @@ This is a proof-of-concept CMS based on Rack and CouchDB, with the goal of being
  3. Install Bundler 1.7.9 (or any version compatible with your Ruby).
  4. Download or check out Dione from here (https://github.com/jensnockert/dione)
  5. Run `bundle install` in the Dione directory
- 6. `DIONE_DATABASE=http://localhost:5984/dione ./generate fixtures/test-blog` to fill the database with test data
- 7. `DIONE_DATABASE=http://localhost:5984/dione DIONE_ENVIRONMENT=development shotgun dione.ru` to start a development server
+ 6. Modify `config/local.example.dione` and rename it `config/local.dione`
+ 6. ./generate fixtures/test-blog` to fill the database with test data
+ 7. `shotgun dione.ru` to start a development server
 
 Then you can play around with your new blog, well, my blog… but replace the style and content with something cool and you'll have your own blog. Then you can deploy it just like any other Rack app on… I don't know, Heroku or something.
 

@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 
-require 'json'
+$:.unshift("#{File.dirname(__FILE__)}/lib")
+
+require 'dione'
 require 'pathname'
-require 'couchrest'
 
 def read_database(db, path)
   configuration = JSON.parse(File.read("#{path}/configuration.json"))
@@ -38,7 +39,7 @@ def read_database(db, path)
   end
 end
 
-database = CouchRest.database(ENV['DIONE_DATABASE'])
+database = CouchRest.database(Dione.configuration['database'])
 database.recreate!
 
 read_database(database, ARGV[0])

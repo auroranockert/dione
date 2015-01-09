@@ -9,31 +9,32 @@
 # distributed under the Licence is distributed on an "AS IS" basis,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the Licence for the specific language governing permissions and
-# limitations under the Licence. 
+# limitations under the Licence.
 
 module Dione
-  class AttachmentHandler < Dione::Middleware
-    priority 20
-
-    def initialize(app)
+  class StaticRouter
+    def initialize(app, configuration)
       @app = app
     end
 
     def call(env)
-      if attachment = env['Dione.attachment']
-        body = case env['REQUEST_METHOD']
-        when 'GET'
-          StringIO.new(attachment.data)
-        when 'HEAD'
-          StringIO.new('')
-        else
-          return [405, { 'Allow' => 'GET, HEAD' }, StringIO.new('')]
-        end
+      routes = env[:dione][:database].view(:dione, :routes, key: env['PATH_INFO'])['rows']
 
-        [200, { 'Content-Type' => attachment.content_type, 'Content-Length' => attachment.content_length.to_s }, body]
-      else
-        @app.call(env)
+      if routes.length == 1
+        route = routes.first['value']
+
+        object = env[:dione][:database].reify('id' => route.first)
+
+        env[:dione][:page] = if attachment = route[1]
+          object.attachment(attachment)
+        else
+          object
+        end
       end
+
+      @app.call(env)
     end
   end
 end
+
+Dione.register_plugin(Dione::StaticRouter)

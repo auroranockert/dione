@@ -22,14 +22,12 @@ module Dione
       self['format']
     end
 
-    def parent
-      if self['parent']
-        self.site.reify(self['parent'])
-      end
+    def template_parent
+      self.database.reify(self['parent']) if self['parent']
     end
 
     def template_text
-      self.attachment(self['template']).data
+      self.attachment(self['template']).content
     end
 
     def render(env, document)
@@ -40,7 +38,7 @@ module Dione
         fail Dione::NotFound, "Template language not implemented"
       end
 
-      self.parent ? self.parent.render(env, document.merge('content' => content)) : content
+      self.template_parent ? self.template_parent.render(env, document.merge('content' => content)) : content
     end
   end
 end

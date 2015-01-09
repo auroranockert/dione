@@ -22,7 +22,7 @@ module Dione
     end
 
     def content
-      self.attachment(self['content']).data
+      self.attachment(self['content']).content
     end
 
     def render(_, document)

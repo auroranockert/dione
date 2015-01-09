@@ -1,23 +1,21 @@
 {
   "_id": "css",
-  "urls": ["/css"],
   "type": "dione/post",
-  "public": false,
   "attachments": {
     "main.css": {
-      "public": true
+      "routes": ["/css/main.css"]
     },
     "syntax.css": {
-      "public": true
+      "routes": ["/css/syntax.css"]
     },
     "blog/header.css": {
-      "public": true
+      "routes": ["/css/blog/header.css"]
     },
     "blog/footer.css": {
-      "public": true
+      "routes": ["/css/blog/footer.css"]
     },
     "blog/articles.css": {
-      "public": true
+      "routes": ["/css/blog/articles.css"]
     }
   }
 }

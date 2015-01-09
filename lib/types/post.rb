@@ -24,7 +24,7 @@ module Dione
     end
 
     def urls
-      self['urls']
+      self['routes']
     end
 
     def canonical_url
@@ -32,11 +32,11 @@ module Dione
     end
 
     def content
-      @content ||= self.site.reify(self['content'], self)
+      @content ||= Dione::Content.new(self.database, self['content'], self)
     end
 
     def template
-      self.site.reify(self['template'])
+      self.database.reify(self['template'])
     end
 
     def to_liquid
@@ -49,10 +49,11 @@ module Dione
     end
 
     def http_get(env)
-      document = { 'page' => self, 'site' => self.site }
+      document = { 'page' => self, 'site' => env[:dione][:site] }
+
       document['content'] = self.content.render(env, document)
 
-      [200, { 'Content-Type' => 'text/html' }, StringIO.new(self.template.render(env, document))]
+      [200, { 'Content-Type' => 'text/html' }, [self.template.render(env, document)]]
     end
   end
 end

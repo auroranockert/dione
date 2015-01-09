@@ -9,28 +9,21 @@
 # distributed under the Licence is distributed on an "AS IS" basis,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the Licence for the specific language governing permissions and
-# limitations under the Licence. 
+# limitations under the Licence.
 
 module Dione
-  class NotFound < StandardError; end
+  class Site < Dione::Object
+    type 'dione/site'
 
-  class ErrorHandler < Dione::Middleware
-    priority 0
-
-    def initialize(app)
-      @app = app
+    def posts
+      self.database.view(:dione, :posts, reify: true, descending: true)
     end
 
-    if ['production', 'testing'].include? ENV['DIONE_ENVIRONMENT']
-      def call(env)
-        @app.call(env)
-      rescue Dione::NotFound
-        [404, { 'Content-Type' => 'text/plain' }, StringIO.new("Could not be found")]
-      end
-    else
-      def call(env)
-        @app.call(env)
-      end
+    def to_liquid
+      {
+        'title' => self['title'],
+        'posts' => lambda { self.posts }
+      }
     end
   end
 end

@@ -12,15 +12,25 @@
 # limitations under the Licence. 
 
 module Dione
-  class Middleware
-    MIDDLEWARE = []
-    
-    def self.priority(priority)
-      MIDDLEWARE.push([self, priority])
+  class NotFound < StandardError; end
+
+  class DioneHandler
+    def initialize(app, configuration)
+      @app, @configuration = app, configuration
+
+      @database = Dione::Database.new(@configuration['database'])
     end
 
-    def self.all
-      MIDDLEWARE.sort { |a, b| a[1] <=> b[1] }.map(&:first)
+    def call(env)
+      env[:dione] = {
+        configuration: @configuration,
+        database: @database,
+        site: @database.reify('id' => @configuration['site'])
+      }
+
+      @app.call(env)
+    rescue Dione::NotFound
+      [404, { 'Content-Type' => 'text/plain' }, StringIO.new("Sorry, could not be found")]
     end
   end
 end

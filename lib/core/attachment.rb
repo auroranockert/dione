@@ -9,28 +9,51 @@
 # distributed under the Licence is distributed on an "AS IS" basis,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the Licence for the specific language governing permissions and
-# limitations under the Licence. 
+# limitations under the Licence.
 
 module Dione
   class Attachment
+    attr_reader :name
+
     def initialize(object, name)
-      @object, @name = object, name
+      @document = object['_attachments'][name]
+
+      if attachments = object['attachments']
+        @document = (attachments[name] || {}).merge(@document)
+      end
+
+      @database, @name, @object = object.database, name, object
     end
 
-    def metadata
-      @metadata ||= @object['attachments'][@name].merge(@object['_attachments'][@name])
+    def id
+      [self.object['_id'], self.name]
     end
 
-    def data
-      @object.site.database.fetch_attachment(@object.document, @name)
+    def [](key)
+      @document[key]
+    end
+
+    def content
+      @database.fetch_attachment(@object, self.name)
     end
 
     def content_length
-      self.metadata['length']
+      self['length']
     end
 
     def content_type
-      self.metadata['content_type']
+      self['content_type']
+    end
+
+    def call(env)
+      case env['REQUEST_METHOD']
+      when 'GET'
+        [200, { 'Content-Type' => self.content_type, 'Content-Length' => self.content_length.to_s }, [self.content]]
+      when 'HEAD'
+        [200, { 'Content-Type' => self.content_type, 'Content-Length' => self.content_length.to_s }, []]
+      else
+        [405, { 'Allow' => methods }, []]
+      end
     end
   end
 end

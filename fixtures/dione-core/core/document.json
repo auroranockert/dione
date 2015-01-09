@@ -3,10 +3,10 @@
    "language": "javascript",
    "views": {
        "routes": {
-           "map": "function (doc) {\n  if (doc.urls) {\n    for (var i = 0; i < doc.urls.length; i++) {\n      var url = doc.urls[i]\n\n      if (doc.public !== false) {\n        emit(url, [doc._id])\n      }\n\n      if (doc._attachments) {\n        var keys = Object.keys(doc._attachments)\n\n        for (var j = 0; j < keys.length; j++) {\n          var key = keys[j]\n          var public = doc.public !== false\n\n          if (doc.attachments) {\n            if (doc.attachments[key]) {\n              if (doc.attachments[key].public !== null) {\n                public = doc.attachments[key].public\n              }\n            }\n          }\n\n          if (public) {\n            emit(url + \"/\" + key, [doc._id, key])\n          }\n        }\n      }\n    }\n  }\n}"
+           "map": "function (doc) { for (var route in doc.routes) { emit(doc.routes[route], [doc._id]) }; for (var attachment in doc.attachments) { for (var route in doc.attachments[attachment].routes) { emit(doc.attachments[attachment].routes[route], [doc._id, attachment]) } } }"
        },
        "posts": {
-           "map": "function (doc) {\n  if (doc.type === 'dione/post' && doc.public !== false) {\n    if (doc.published_at) {\n      emit(doc.published_at, null)\n    }\n  }\n}"
+           "map": "function (doc) { if (doc.type === 'dione/post' && doc.routes && doc.routes.length > 0) { if (!doc.hidden) { emit(doc.published_at, null) } } }"
        }
    }
 }

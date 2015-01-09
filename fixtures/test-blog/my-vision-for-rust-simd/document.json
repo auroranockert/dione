@@ -2,13 +2,8 @@
   "_id": "my-vision-for-rust-simd",
   "title": "My Vision for Rust SIMD",
   "published_at": "2013-07-17T07:34:00+02:00",
-  "urls": ["/my-vision-for-rust-simd", "/post/55669497784/my-vision-for-rust-simd"],
+  "routes": ["/my-vision-for-rust-simd", "/post/55669497784/my-vision-for-rust-simd"],
   "type": "dione/post",
   "content": { "type": "dione/content", "format": "markdown", "content": "my-vision-for-rust-simd.md" },
-  "template": { "id": "post-template" },
-  "attachments": {
-    "my-vision-for-rust-simd.md": {
-      "public": false
-    }
-  }
+  "template": { "id": "post-template" }
 }

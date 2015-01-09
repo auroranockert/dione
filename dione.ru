@@ -11,16 +11,24 @@
 # See the Licence for the specific language governing permissions and
 # limitations under the Licence. 
 
-require 'pathname'
+$:.unshift("#{File.dirname(__FILE__)}/lib")
 
-module ::Dione
-  LIB = Pathname.new("#{File.dirname(__FILE__)}/lib")
+require 'dione'
+
+configuration = Dione.configuration
+
+use Dione::DioneHandler, configuration
+
+Dione.plugins.each do |plugin|
+  use plugin, configuration
 end
 
-$:.unshift(Dione::LIB)
+app = lambda do |env|
+  if page = env[:dione][:page]
+    page.call(env)
+  else
+    raise Dione::NotFound
+  end
+end
 
-Pathname.glob("#{File.dirname(__FILE__)}/lib/{core,types,middleware}/*.rb") { |f| require f.relative_path_from(Dione::LIB) }
-
-Dione::Middleware.all.each { |m| use m }
-
-run (lambda { |env| env['Dione.page'].call(env) })
+run app
