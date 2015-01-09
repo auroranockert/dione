@@ -37,7 +37,7 @@ module Dione
 
     def call(env)
       method = "http_#{env['REQUEST_METHOD'].downcase}"
-      
+
       if self.respond_to? method
         self.send(method, env)
       else

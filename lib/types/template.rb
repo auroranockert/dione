@@ -9,7 +9,7 @@
 # distributed under the Licence is distributed on an "AS IS" basis,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the Licence for the specific language governing permissions and
-# limitations under the Licence. 
+# limitations under the Licence.
 
 require 'liquid'
 require 'mustache'
@@ -38,7 +38,11 @@ module Dione
         fail Dione::NotFound, "Template language not implemented"
       end
 
-      self.template_parent ? self.template_parent.render(env, document.merge('content' => content)) : content
+      if self.template_parent
+        self.template_parent.render(env, document.merge('content' => content))
+      else
+        content
+      end
     end
   end
 end

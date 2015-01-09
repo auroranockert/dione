@@ -46,11 +46,16 @@ module Dione
     end
 
     def call(env)
+      headers =  {
+        'Content-Type' => self.content_type,
+        'Content-Length' => self.content_length.to_s
+      }
+
       case env['REQUEST_METHOD']
       when 'GET'
-        [200, { 'Content-Type' => self.content_type, 'Content-Length' => self.content_length.to_s }, [self.content]]
+        [200, headers, [self.content]]
       when 'HEAD'
-        [200, { 'Content-Type' => self.content_type, 'Content-Length' => self.content_length.to_s }, []]
+        [200, headers, []]
       else
         [405, { 'Allow' => methods }, []]
       end

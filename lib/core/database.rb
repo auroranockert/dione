@@ -29,7 +29,7 @@ module Dione
       params.merge!(include_docs: true) if params[:reify]
 
       result = @database.view("#{design}/#{view}", params)
-      
+
       if params[:reify]
         result['rows'].map { |r| self.reify(r['doc'])}
       else
@@ -42,7 +42,9 @@ module Dione
     end
 
     def reify(document, parent = nil)
-      document = @database.get(document['id']).merge(document) if parent == nil && document['id']
+      if parent == nil && document['id']
+        document = @database.get(document['id']).merge(document)
+      end
 
       if type = TYPE_TO_CLASS[document['type']]
         type.new(self, document, parent)
@@ -50,7 +52,7 @@ module Dione
         nil
       end
     end
-    
+
     def inspect
       "#<#{self.class.name}:#{self.object_id} @url=#{@database}>"
     end

@@ -15,7 +15,9 @@ require 'json'
 
 module Dione
   def self.configuration
-    @configuration ||= self.load_configuration(ENV['DIONE_CONFIG'] || 'config/local.dione')
+    path = ENV['DIONE_CONFIG'] || 'config/local.dione'
+
+    @configuration ||= self.load_configuration(path)
   end
 
   def self.register_plugin(plugin)
