@@ -9,9 +9,9 @@
 # distributed under the Licence is distributed on an "AS IS" basis,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the Licence for the specific language governing permissions and
-# limitations under the Licence. 
+# limitations under the Licence.
 
-$:.unshift("#{File.dirname(__FILE__)}/lib")
+$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/lib")
 
 require 'dione'
 
@@ -27,7 +27,7 @@ app = lambda do |env|
   if page = env[:dione][:page]
     page.call(env)
   else
-    raise Dione::NotFound
+    fail Dione::NotFound
   end
 end
 

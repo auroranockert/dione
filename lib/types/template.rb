@@ -15,6 +15,12 @@ require 'liquid'
 require 'mustache'
 
 module Dione
+  module LiquidTemplate
+    def self.render(template, document)
+      Liquid::Template.parse(template).render(document)
+    end
+  end
+
   class Template < Dione::Object
     type 'dione/template'
 
@@ -31,15 +37,14 @@ module Dione
     end
 
     def render(env, document)
-      content = case self.format
-      when 'liquid'
-        Liquid::Template.parse(self.template_text).render(document)
+      content = case format = self.format
+      when 'liquid' then Dione::LiquidTemplate
       else
-        fail Dione::NotFound, "Template language not implemented"
-      end
+        fail Dione::NotFound, "Template language `#{format}` not implemented"
+      end.render(self.template_text, document)
 
-      if self.template_parent
-        self.template_parent.render(env, document.merge('content' => content))
+      if parent = self.template_parent
+        parent.render(env, document.merge('content' => content))
       else
         content
       end

@@ -41,8 +41,8 @@ module Dione
       if self.respond_to? method
         self.send(method, env)
       else
-        methods = [:get, :head, :post, :put, :delete].map do |method|
-          method.to_s.upcase if self.respond_to? "http_#{method}".intern
+        methods = [:get, :head, :post, :put, :delete].map do |m|
+          method.to_s.upcase if self.respond_to? "http_#{m}".intern
         end.compact.join(', ')
 
         [405, { 'Allow' => methods }, StringIO.new('')]
@@ -54,11 +54,11 @@ module Dione
     end
 
     def attachment(name)
-      if attachments = self.root['_attachments'] and attachments.keys.include? name
-        Dione::Attachment.new(self.root, name)
-      else
-        nil
-      end
+      attachments = self.root['_attachments']
+
+      has_attachment = attachments.keys.include?(name) if attachments
+
+      Dione::Attachment.new(self.root, name) if has_attachment
     end
 
     def attachments

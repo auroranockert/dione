@@ -53,7 +53,9 @@ module Dione
 
       document['content'] = self.content.render(env, document)
 
-      [200, { 'Content-Type' => 'text/html' }, [self.template.render(env, document)]]
+      headers = { 'Content-Type' => 'text/html' }
+
+      [200, headers, [self.template.render(env, document)]]
     end
   end
 end

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$:.unshift("#{File.dirname(__FILE__)}/lib")
+$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/lib")
 
 require 'dione'
 require 'pathname'
@@ -18,7 +18,7 @@ def read_database(db, path)
     db.save_doc(object)
 
     Pathname.glob("#{document.dirname}/**/*") do |file|
-      unless file.directory? or file == document
+      unless file.directory? || file == document
         object = db.get(object['_id'])
 
         path = file.relative_path_from(document.dirname).to_s

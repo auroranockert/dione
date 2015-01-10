@@ -53,7 +53,7 @@ require 'types/post'
 require 'types/site'
 require 'types/template'
 
-$:.unshift "#{File.dirname(__FILE__)}/plugins"
+$LOAD_PATH.unshift "#{File.dirname(__FILE__)}/plugins"
 
 Dione.configuration['plugins'].each do |plugin|
   require "#{plugin}/#{plugin}.rb"

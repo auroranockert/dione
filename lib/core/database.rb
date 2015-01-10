@@ -31,7 +31,7 @@ module Dione
       result = @database.view("#{design}/#{view}", params)
 
       if params[:reify]
-        result['rows'].map { |r| self.reify(r['doc'])}
+        result['rows'].map { |r| self.reify(r['doc']) }
       else
         result
       end
@@ -42,15 +42,13 @@ module Dione
     end
 
     def reify(document, parent = nil)
-      if parent == nil && document['id']
+      if !parent && document['id']
         document = @database.get(document['id']).merge(document)
       end
 
-      if type = TYPE_TO_CLASS[document['type']]
-        type.new(self, document, parent)
-      else
-        nil
-      end
+      type = TYPE_TO_CLASS[document['type']]
+
+      type.new(self, document, parent) if type
     end
 
     def inspect

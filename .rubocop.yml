@@ -1,0 +1,29 @@
+AllCops:
+  Include:
+    - 'dione.ru'
+  Exclude:
+    - 'generate'
+
+LineLength:
+  Max: 80
+
+Documentation:
+  Enabled: false
+
+CaseIndentation:
+  IndentWhenRelativeTo: end
+
+Lint/EndAlignment:
+  AlignWith: variable
+
+Lint/AssignmentInCondition:
+  Enabled: false
+
+Style/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Style/RedundantSelf:
+  Enabled: false
+  
+Style/AsciiComments:
+  Enabled: false

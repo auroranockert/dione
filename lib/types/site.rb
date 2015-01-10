@@ -22,7 +22,7 @@ module Dione
     def to_liquid
       {
         'title' => self['title'],
-        'posts' => lambda { self.posts }
+        'posts' => -> { self.posts }
       }
     end
   end

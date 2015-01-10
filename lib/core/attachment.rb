@@ -52,10 +52,8 @@ module Dione
       }
 
       case env['REQUEST_METHOD']
-      when 'GET'
-        [200, headers, [self.content]]
-      when 'HEAD'
-        [200, headers, []]
+      when 'GET' then [200, headers, [self.content]]
+      when 'HEAD' then [200, headers, []]
       else
         [405, { 'Allow' => methods }, []]
       end

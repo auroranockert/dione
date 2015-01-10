@@ -30,7 +30,7 @@ module Dione
 
       @app.call(env)
     rescue Dione::NotFound
-      [404, { 'Content-Type' => 'text/plain' }, StringIO.new("Sorry, could not be found")]
+      [404, { 'Content-Type' => 'text/plain' }, ['Sorry, could not be found']]
     end
   end
 end

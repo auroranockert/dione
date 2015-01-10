@@ -14,6 +14,24 @@
 require 'redcarpet'
 
 module Dione
+  module LiquidContent
+    def self.render(content, document)
+      Liquid::Template.parse(content).render(document)
+    end
+  end
+
+  module MarkdownContent
+    def self.render(content, _)
+      Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(content)
+    end
+  end
+
+  module RawContent
+    def self.render(content, _)
+      content
+    end
+  end
+
   class Content < Dione::Object
     type 'dione/content'
 
@@ -26,16 +44,13 @@ module Dione
     end
 
     def render(_, document)
-      case self.format
-      when 'html-fragment'
-        self.content
-      when 'markdown'
-        Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(self.content)
-      when 'liquid'
-        Liquid::Template.parse(self.content).render(document)
+      case format = self.format
+      when 'html-fragment' then Dione::RawContent
+      when 'markdown' then Dione::MarkdownContent
+      when 'liquid' then Dione::LiquidContent
       else
-        fail Dione::NotFound, "Content format #{self.format} not supported"
-      end
+        fail Dione::NotFound, "Content format #{format} not supported"
+      end.render(self.content, document)
     end
   end
 end
