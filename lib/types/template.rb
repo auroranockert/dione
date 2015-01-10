@@ -29,7 +29,9 @@ module Dione
     end
 
     def template_parent
-      self.database.reify(self['parent']) if self['parent']
+      parent = self['parent']
+
+      self.database.reify(parent) if parent
     end
 
     def template_text
