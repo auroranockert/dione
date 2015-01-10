@@ -19,8 +19,12 @@ configuration = Dione.configuration
 
 use Dione::DioneHandler, configuration
 
-Dione.plugins.each do |plugin|
-  use plugin, configuration
+Dione.configuration['middleware'].each do |middleware|
+  # Eval here isn't bad, if you can change the config you can also change the
+  # actual code, so we're just going to ignore it for now.
+  # rubocop:disable Lint/Eval
+  use eval(middleware)
+  # rubocop:enable Lint/Eval
 end
 
 app = lambda do |env|

@@ -13,7 +13,7 @@
 
 module Dione
   class StaticRouter
-    def initialize(app, _)
+    def initialize(app)
       @app = app
     end
 
@@ -40,5 +40,3 @@ module Dione
     end
   end
 end
-
-Dione.register_plugin(Dione::StaticRouter)

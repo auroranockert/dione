@@ -20,14 +20,6 @@ module Dione
     @configuration ||= self.load_configuration(path)
   end
 
-  def self.register_plugin(plugin)
-    self.plugins.push(plugin)
-  end
-
-  def self.plugins
-    @plugins ||= []
-  end
-
 protected
 
   def self.load_configuration(file)
@@ -53,8 +45,10 @@ require 'types/post'
 require 'types/site'
 require 'types/template'
 
-$LOAD_PATH.unshift "#{File.dirname(__FILE__)}/plugins"
+plugins = "#{File.dirname(__FILE__)}/plugins"
 
-Dione.configuration['plugins'].each do |plugin|
-  require "#{plugin}/#{plugin}.rb"
+$LOAD_PATH.unshift(plugins)
+
+Dir.glob("#{plugins}/*/*.rb") do |plugin|
+  require plugin
 end
