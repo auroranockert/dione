@@ -20,7 +20,9 @@ module Dione
     end
 
     def published_at
-      Time.iso8601(self['published_at']) if self['published_at']
+      published_at = self['published_at']
+
+      Time.iso8601(published_at) if published_at
     end
 
     def urls
