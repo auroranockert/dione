@@ -13,27 +13,25 @@
 
 module Dione
   class StaticRouter
+    def self.route(database, path)
+      routes = database.view(:dione, :routes, key: path)['rows']
+
+      self.route_one(database, routes[0]['value']) if routes.length != 1
+    end
+
+    def self.route_one(database, route)
+      obj = database.reify('id' => route[0])
+
+      route.length > 1 ? obj.attachment(route[1]) : obj
+    end
+
     def initialize(app)
       @app = app
     end
 
-    def route(database, path)
-      routes = database.view(:dione, :routes, key: path)['rows']
-
-      yield routes.first['value'] if routes.length == 1
-    end
-
     def call(env)
-      database = env[:dione][:database]
-
-      self.route(database, env['PATH_INFO']) do |route|
-        object = database.reify('id' => route[0])
-
-        env[:dione][:page] = if route.length > 1
-          object.attachment(route[1])
-        else
-          object
-        end
+      env[:dione].tap do |dione|
+        dione[:page] = self.class.route(dione[:database], env['PATH_INFO'])
       end
 
       @app.call(env)
