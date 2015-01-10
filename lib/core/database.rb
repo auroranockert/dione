@@ -26,7 +26,7 @@ module Dione
     end
 
     def view(design, view, params = {})
-      @database.view("#{design}/#{view}", params)
+      @database.view("#{design}/#{view}", params)['rows']
     end
 
     def query(design, view, params)

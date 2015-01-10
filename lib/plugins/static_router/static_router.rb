@@ -14,9 +14,9 @@
 module Dione
   class StaticRouter
     def self.route(database, path)
-      routes = database.view(:dione, :routes, key: path)['rows']
+      routes = database.view(:dione, :routes, key: path)
 
-      self.route_one(database, routes[0]['value']) if routes.length != 1
+      self.route_one(database, routes[0]['value']) if routes.length == 1
     end
 
     def self.route_one(database, route)

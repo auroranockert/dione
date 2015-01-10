@@ -11,6 +11,10 @@
 # Licence for the specific language governing permissions and limitations under
 # the Licence.
 
+require 'simplecov'
+
+SimpleCov.start 'rails'
+
 $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/lib")
 
 require 'dione'

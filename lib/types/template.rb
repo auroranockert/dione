@@ -17,7 +17,7 @@ require 'mustache'
 module Dione
   module LiquidTemplate
     def self.render(template, document)
-      Liquid::Template.parse(template).render(document)
+      Liquid::Template.parse(template, error_mode: :strict).render(document)
     end
   end
 

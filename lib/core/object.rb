@@ -33,12 +33,6 @@ module Dione
       @root
     end
 
-    def id
-      id = self['_id']
-
-      [id] if id
-    end
-
     def [](key)
       self.document[key]
     end
@@ -57,10 +51,6 @@ module Dione
       end
     end
 
-    def key
-      self['_key']
-    end
-
     def attachment(name)
       root = self.root
       attachments = root['_attachments']
@@ -68,14 +58,6 @@ module Dione
       available = attachments && attachments[name]
 
       Dione::Attachment.new(root, name) if available
-    end
-
-    def attachments
-      root = self.root
-
-      (root['_attachments'] || {}).keys.map do |name|
-        Dione::Attachment.new(root, name)
-      end
     end
   end
 end
