@@ -16,7 +16,7 @@ module Dione
     type 'dione/site'
 
     def posts
-      self.database.view(:dione, :posts, reify: true, descending: true)
+      self.database.query(:dione, :posts, descending: true)
     end
 
     def to_liquid
