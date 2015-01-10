@@ -57,5 +57,11 @@ module Dione
 
       [200, headers, [self.template.render(env, document)]]
     end
+
+    def http_head(env)
+      self.http_get(env).tap do |reply|
+        reply[2] = []
+      end
+    end
   end
 end

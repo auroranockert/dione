@@ -26,8 +26,8 @@ protected
     config = JSON.parse(File.read(file))
 
     if includes = config['include']
-      includes.each do |f|
-        config.merge!(self.load_configuration("#{File.dirname(file)}/#{f}"))
+      includes.each do |inc|
+        config.merge!(self.load_configuration("#{File.dirname(file)}/#{inc}"))
       end
     end
 

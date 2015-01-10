@@ -19,16 +19,24 @@ module Dione
       Dione::Database.register_type(name, self)
     end
 
-    def initialize(database, document, parent)
+    def initialize(database, document, parent = nil)
       @database, @document, @parent = database, document, parent
     end
 
     def root
-      @root ||= self.parent ? self.parent.root : self
+      unless @root
+        parent = self.parent
+
+        @root = parent ? parent.root : self
+      end
+
+      @root
     end
 
     def id
-      [self['_id']] if self['_id']
+      id = self['_id']
+
+      [id] if id
     end
 
     def [](key)
@@ -36,16 +44,16 @@ module Dione
     end
 
     def call(env)
-      method = "http_#{env['REQUEST_METHOD'].downcase}"
+      http_method = "http_#{env['REQUEST_METHOD'].downcase}"
 
-      if self.respond_to? method
-        self.send(method, env)
+      if self.respond_to? http_method
+        self.send(http_method, env)
       else
-        methods = [:get, :head, :post, :put, :delete].map do |m|
-          method.to_s.upcase if self.respond_to? "http_#{m}".intern
+        methods = [:get, :head, :post, :put, :delete].map do |method|
+          method.to_s.upcase if self.respond_to? "http_#{method}"
         end.compact.join(', ')
 
-        [405, { 'Allow' => methods }, StringIO.new('')]
+        [405, { 'Allow' => methods }, []]
       end
     end
 
@@ -54,18 +62,19 @@ module Dione
     end
 
     def attachment(name)
-      attachments = self.root['_attachments']
+      root = self.root
+      attachments = root['_attachments']
 
-      has_attachment = attachments.keys.include?(name) if attachments
+      available = attachments && attachments[name]
 
-      Dione::Attachment.new(self.root, name) if has_attachment
+      Dione::Attachment.new(root, name) if available
     end
 
     def attachments
-      if attachments = self.root['_attachments']
-        attachments.keys.map { |name| Dione::Attachment.new(self.root, name) }
-      else
-        []
+      root = self.root
+
+      (root['_attachments'] || {}).keys.map do |name|
+        Dione::Attachment.new(root, name)
       end
     end
   end

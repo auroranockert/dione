@@ -55,7 +55,7 @@ module Dione
       when 'GET' then [200, headers, [self.content]]
       when 'HEAD' then [200, headers, []]
       else
-        [405, { 'Allow' => methods }, []]
+        [405, { 'Allow' => 'GET, HEAD' }, []]
       end
     end
   end
