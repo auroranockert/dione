@@ -1,5 +1,5 @@
 {
   "include": ["default.dione"],
   "database": "http://localhost:5984/dione",
-  "plugins": ["static_router"]
+  "middleware": ["Dione::StaticRouter"]
 }
