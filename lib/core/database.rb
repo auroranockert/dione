@@ -31,7 +31,9 @@ module Dione
 
     def query(design, view, params)
       self.view(design, view, params.merge(include_docs: true)).map do |row|
-        self.reify(row['doc'])
+        object = self.reify(row['doc'])
+        object.document['_value'] = row['value']
+        object
       end
     end
 

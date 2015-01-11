@@ -3,7 +3,7 @@
    "language": "javascript",
    "views": {
        "routes": {
-           "map": "function (doc) { for (var route in doc.routes) { emit(doc.routes[route], [doc._id]) }; for (var attachment in doc.attachments) { for (var route in doc.attachments[attachment].routes) { emit(doc.attachments[attachment].routes[route], [doc._id, attachment]) } } }"
+           "map": "function (doc) { for (var route in doc.routes) { emit(doc.routes[route], null) }; for (var attachment in doc.attachments) { for (var route in doc.attachments[attachment].routes) { emit(doc.attachments[attachment].routes[route], attachment) } } }"
        },
        "posts": {
            "map": "function (doc) { if (doc.type === 'dione/post' && doc.routes && doc.routes.length > 0) { if (!doc.hidden) { emit(doc.published_at, null) } } }"

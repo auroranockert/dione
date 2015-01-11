@@ -14,15 +14,17 @@
 module Dione
   class StaticRouter
     def self.route(database, path)
-      routes = database.view(:dione, :routes, key: path)
+      routes = database.query(:dione, :routes, key: path)
 
-      self.route_one(database, routes[0]['value']) if routes.length == 1
-    end
+      return unless routes.length == 1
 
-    def self.route_one(database, route)
-      obj = database.reify('id' => route[0])
+      object = routes[0]
 
-      route.length > 1 ? obj.attachment(route[1]) : obj
+      if attachment = object['_value']
+        object.attachment(attachment)
+      else
+        object
+      end
     end
 
     def initialize(app)
