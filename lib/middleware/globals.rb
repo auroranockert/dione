@@ -11,38 +11,24 @@
 # Licence for the specific language governing permissions and limitations under
 # the Licence.
 
-$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/lib")
+module Dione
+  class Globals
+    def initialize(app, ids)
+      @app, @ids = app, ids
+    end
 
-require 'dione'
+    def call(env)
+      dione = env[:dione]
 
-configuration = Dione.configuration
+      globals = dione[:globals] || {}
 
-use Dione::DioneBase, configuration
+      @ids.each do |key, id|
+        globals[key] = dione[:database].reify('id' => id)
+      end
 
-options = configuration['options']
+      dione[:globals] = globals
 
-Dione.configuration['middleware'].each do |middleware|
-  # Eval here isn't bad, if you can change the config you can also change the
-  # actual code, so we're just going to ignore it for now.
-  # rubocop:disable Lint/Eval
-  klass = eval(middleware)
-  # rubocop:enable Lint/Eval
-
-  opts = options[middleware]
-
-  if opts
-    use klass, opts
-  else
-    use klass
+      @app.call(env)
+    end
   end
 end
-
-app = lambda do |env|
-  if page = env[:dione][:page]
-    page.call(env)
-  else
-    fail Dione::NotFound
-  end
-end
-
-run app

@@ -51,7 +51,7 @@ module Dione
     end
 
     def http_get(env)
-      document = { 'page' => self, 'site' => env[:dione][:site] }
+      document = env[:dione][:globals].merge('page' => self)
 
       document['content'] = self.content.render(env, document)
 

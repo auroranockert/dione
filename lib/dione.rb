@@ -39,17 +39,11 @@ require 'core/object'
 require 'core/attachment'
 require 'core/database'
 
-require 'middleware/dione_base'
-
 require 'types/content'
 require 'types/post'
 require 'types/site'
 require 'types/template'
 
-plugins = "#{File.dirname(__FILE__)}/plugins"
-
-$LOAD_PATH.unshift(plugins)
-
-Dir.glob("#{plugins}/*/*.rb") do |plugin|
-  require plugin
+Dir.glob("#{File.dirname(__FILE__)}/middleware/*.rb") do |middleware|
+  require middleware
 end

@@ -1,5 +1,8 @@
 {
   "include": ["default.dione"],
   "database": "http://localhost:5984/dione",
-  "middleware": ["Dione::StaticRouter"]
+  "middleware": ["Dione::StaticRouter", "Dione::Globals"],
+  "options": {
+    "Dione::Globals": { "site": "site" }
+  }
 }
