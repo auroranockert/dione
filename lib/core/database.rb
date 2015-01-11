@@ -49,8 +49,12 @@ module Dione
       type.new(self, document, parent) if type
     end
 
+    def url
+      @database.to_s
+    end
+
     def inspect
-      "#<#{self.class.name}:#{self.object_id} @url=#{@database}>"
+      "#<#{self.class.name}:#{self.object_id} @url=#{self.url}>"
     end
   end
 end

@@ -38,7 +38,8 @@ end
 require 'core/object'
 require 'core/attachment'
 require 'core/database'
-require 'core/dione'
+
+require 'middleware/dione_base'
 
 require 'types/content'
 require 'types/post'

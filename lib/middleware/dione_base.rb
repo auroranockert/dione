@@ -14,7 +14,7 @@
 module Dione
   class NotFound < StandardError; end
 
-  class DioneHandler
+  class DioneBase
     def initialize(app, configuration)
       @app, @configuration = app, configuration
 
@@ -24,8 +24,7 @@ module Dione
     def call(env)
       env[:dione] = {
         configuration: @configuration,
-        database: @database,
-        site: @database.reify('id' => @configuration['site'])
+        database: @database
       }
 
       @app.call(env)

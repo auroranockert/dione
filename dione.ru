@@ -17,7 +17,7 @@ require 'dione'
 
 configuration = Dione.configuration
 
-use Dione::DioneHandler, configuration
+use Dione::DioneBase, configuration
 
 Dione.configuration['middleware'].each do |middleware|
   # Eval here isn't bad, if you can change the config you can also change the
