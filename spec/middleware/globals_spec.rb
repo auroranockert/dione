@@ -11,8 +11,7 @@
 # Licence for the specific language governing permissions and limitations under
 # the Licence.
 
-require 'rack'
-require 'dione'
+require 'spec_helper'
 
 describe Dione::Globals do
   def globals(opts)
