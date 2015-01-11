@@ -45,7 +45,7 @@ module Dione
 
     def render(_, document)
       puts document['site'].posts.inspect
-      
+
       case format = self.format
       when 'html-fragment' then Dione::RawContent
       when 'markdown' then Dione::MarkdownContent
