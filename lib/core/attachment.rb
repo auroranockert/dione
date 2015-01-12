@@ -18,15 +18,13 @@ module Dione
     def initialize(object, name)
       @document = object['_attachments'][name]
 
+      fail ArgumentError unless @document
+
       if attachments = object['attachments']
         @document = (attachments[name] || {}).merge(@document)
       end
 
-      @database, @name, @object = object.database, name, object
-    end
-
-    def id
-      [self.object['_id'], self.name]
+      @name, @object = name, object
     end
 
     def [](key)
@@ -34,7 +32,7 @@ module Dione
     end
 
     def content
-      @database.fetch_attachment(@object, self.name)
+      @object.database.fetch_attachment(@object, self.name)
     end
 
     def content_length
