@@ -14,18 +14,18 @@
 require 'json'
 
 module Dione
-  def self.configuration
-    path = ENV['DIONE_CONFIG'] || 'config/local.dione'
-
-    @configuration ||= self.load_configuration(path)
+  def self.configuration_path
+    ENV['DIONE_CONFIG'] || 'config/local.dione'
   end
 
-protected
+  def self.configuration
+    @configuration ||= self.load_configuration(self.configuration_path)
+  end
 
   def self.load_configuration(file)
     config = JSON.parse(File.read(file))
 
-    if includes = config['include']
+    if includes = config.delete('include')
       includes.each do |inc|
         config.merge!(self.load_configuration("#{File.dirname(file)}/#{inc}"))
       end
