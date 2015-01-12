@@ -51,6 +51,12 @@ module Dione
       type.new(self, document, parent) if type
     end
 
+    def reify_list(ids)
+      @database.get_bulk(ids)['rows'].map do |document|
+        self.reify(document)
+      end
+    end
+
     def url
       @database.to_s
     end

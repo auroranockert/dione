@@ -28,8 +28,7 @@ describe Dione::Globals do
   it 'Gets globals from database' do
     db = instance_double('Dione::Database')
 
-    expect(db).to receive(:reify).with('id' => 'a').and_return(:a).once
-    expect(db).to receive(:reify).with('id' => 'b').and_return(:b).once
+    expect(db).to receive(:reify_list).with(['a', 'b']) { [:a, :b] }.once
 
     middleware = globals('x' => 'a', 'y' => 'b')
 
@@ -41,7 +40,7 @@ describe Dione::Globals do
   it 'Adds to globals hash if there already are globals' do
     db = instance_double('Dione::Database')
 
-    expect(db).to receive(:reify).with('id' => 'a').and_return(:a).once
+    expect(db).to receive(:reify_list).with(['a']) { [:a] }.once
 
     middleware = globals('x' => 'a')
 

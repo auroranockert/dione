@@ -18,15 +18,11 @@ module Dione
     end
 
     def call(env)
-      dione = env[:dione]
+      env[:dione].tap do |dione|
+        globals = @ids.keys.zip(dione[:database].reify_list(@ids.values)).to_h
 
-      globals = dione[:globals] || {}
-
-      @ids.each do |key, id|
-        globals[key] = dione[:database].reify('id' => id)
+        dione[:globals] = (dione[:globals] || {}).merge(globals)
       end
-
-      dione[:globals] = globals
 
       @app.call(env)
     end

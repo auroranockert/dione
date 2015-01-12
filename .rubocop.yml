@@ -27,3 +27,6 @@ Style/RedundantSelf:
   
 Style/AsciiComments:
   Enabled: false
+
+Style/WordArray:
+  Enabled: false
